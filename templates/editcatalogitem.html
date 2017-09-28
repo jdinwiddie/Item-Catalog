@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Edit Catalog Item</title>
+
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/toolkit-inverse.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/application.css') }}">
+
+  </head>
+  <body class="with-top-navbar">
+
+    <nav class="navbar navbar-inverse navbar-fixed-top app-navbar">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-main">
+            <span class="sr-only">Toggle navigation</span>
+          </button>
+        </div>
+        <div class="navbar-collapse collapse" id="navbar-collapse-main">
+
+            <ul class="nav navbar-nav hidden-xs">
+              <li class="active">
+                <a href='{{url_for('ListCatalog')}}'>Home</a>
+              </li>
+              <li>
+                <a href='{{url_for('showLogin')}}'>Login</a>
+              </li>
+            </ul>
+
+          </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="col-sm-9 content">
+
+
+        <h2 class="dashhead-title" style="padding-top: 30px;">Edit Catalog Item</h2>
+
+        <form action="{{url_for('editCatalogItem', catalog_id = i.id)}}" method = 'POST'>
+          <p>Name:</p>
+          <input type='text' class='form-control' size='30' name='name' placeholder = '{{i.name}}'></br>
+          </br></br>
+          <p>Description:</p>
+          <input type='text' class='form-control' size='30' name='description' placeholder = '{{i.description}}'></br>
+          </br></br>
+          <p>Price:</p>
+          <input type='text' class='form-control' size='30' name='price' placeholder = '{{i.price}}'></br></br>
+          <button type='submit' class="btn btn-primary-outline">Save Changes</button></br></br>
+        </form>
+
+        <a href= "{{url_for('ListCatalog', catalog_id = i.id)}}"><button class="btn btn-primary"> Cancel </button></a>
+
+      </div>
+    </div>
+
+  </body>
+</html>

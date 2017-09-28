@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Delete Catalog Item</title>
+
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/toolkit-inverse.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/application.css') }}">
+
+  </head>
+  <body class="with-top-navbar">
+
+    <nav class="navbar navbar-inverse navbar-fixed-top app-navbar">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-main">
+            <span class="sr-only">Toggle navigation</span>
+          </button>
+        </div>
+        <div class="navbar-collapse collapse" id="navbar-collapse-main">
+
+            <ul class="nav navbar-nav hidden-xs">
+              <li class="active">
+                <a href='{{url_for('ListCatalog')}}'>Home</a>
+              </li>
+              <li>
+                <a href='{{url_for('showLogin')}}'>Login</a>
+              </li>
+            </ul>
+
+          </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="col-sm-9 content">
+        <h2 class="dashhead-title" style="padding-top: 30px;"> Are you sure you want to delete item: "{{item.name}}"? </h2>
+
+        <form action="{{ url_for('deleteCatalogItem', catalog_id = item.id)}}" method = 'post'>
+          <button type='submit' class="btn btn-primary-outline">Delete</button>
+        </form>
+        </br>
+        <a href='{{url_for('ListCatalog')}}'><button class="btn btn-primary-outline block">Cancel</button></a>
+
+
+      </div>
+    </div>
+</body>
+
+</html>
