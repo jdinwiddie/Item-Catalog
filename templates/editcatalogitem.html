@@ -1,3 +1,5 @@
+<!-- Item Catalog Project with Bootstrap 4. -->
+<!-- Edit Item Page. -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,12 +9,14 @@
 
     <title>Edit Catalog Item</title>
 
+    <!-- Connect to stylesheets. -->
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/toolkit-inverse.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/application.css') }}">
 
   </head>
   <body class="with-top-navbar">
 
+    <!-- Navbar -->
     <nav class="navbar navbar-inverse navbar-fixed-top app-navbar">
       <div class="container">
         <div class="navbar-header">
@@ -22,12 +26,13 @@
         </div>
         <div class="navbar-collapse collapse" id="navbar-collapse-main">
 
-            <ul class="nav navbar-nav hidden-xs">
-              <li class="active">
-                <a href='{{url_for('ListCatalog')}}'>Home</a>
+          <!-- Navbar buttons for logging in and out.-->
+            <ul class="nav navbar-nav navbar-right">
+              <li>
+                <a href='{{url_for('showLogin')}}'><button class="btn btn-primary navbar-btn">Login</button></a>
               </li>
               <li>
-                <a href='{{url_for('showLogin')}}'>Login</a>
+                <a href='{{url_for('gdisconnect')}}'><button class="btn btn-danger navbar-btn">Logout</button></a>
               </li>
             </ul>
 
@@ -35,9 +40,9 @@
       </div>
     </nav>
 
+    <!-- Container for user to edit the item, item price, and item description. -->
     <div class="container">
       <div class="col-sm-9 content">
-
 
         <h2 class="dashhead-title" style="padding-top: 30px;">Edit Catalog Item</h2>
 

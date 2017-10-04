@@ -1,3 +1,4 @@
+<!-- Item Catalog Project with Bootstrap 4. -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,6 +8,7 @@
 
     <title>Item Catalog</title>
 
+    <!-- Connect to stylesheets -->
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/toolkit-inverse.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/application.css') }}">
 
@@ -15,6 +17,7 @@
 
   <body class="with-top-navbar">
 
+    <!-- Navbar -->
     <nav class="navbar navbar-inverse navbar-fixed-top app-navbar">
       <div class="container">
         <div class="navbar-header">
@@ -24,12 +27,13 @@
         </div>
         <div class="navbar-collapse collapse" id="navbar-collapse-main">
 
-            <ul class="nav navbar-nav hidden-xs">
-              <li class="active">
-                <a href='{{url_for('ListCatalog')}}'>Home</a>
+          <!-- Navbar buttons for logging in and out.-->
+            <ul class="nav navbar-nav navbar-right">
+              <li>
+                <a href='{{url_for('showLogin')}}'><button class="btn btn-primary navbar-btn">Login</button></a>
               </li>
               <li>
-                <a href='{{url_for('showLogin')}}'>Login</a>
+                <a href='{{url_for('gdisconnect')}}'><button class="btn btn-danger navbar-btn">Logout</button></a>
               </li>
             </ul>
 
@@ -37,18 +41,20 @@
       </div>
     </nav>
 
+    <!-- Main content container.  Link for creating new button. -->
     <div class="container">
 
       <div class="col-sm-9 content">
 
         <div class="dashhead">
           <div class="dashhead-titles">
-          <h2 class="dashhead-title" style="padding-top: 30px;">Item Catalog</h2>
+          <h2 class="dashhead-title" style="padding-top: 60px;">Item Catalog</h2>
           <h4 class="dashhead-title"><a href='{{url_for('newCatalogItem')}}'>Create New Catalog Item</a></h4>
           </div>
 
         </div>
 
+        <!-- List items in catalog nicely. -->
       <div class="table-full">
 
         <div class="table-responsive">

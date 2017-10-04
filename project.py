@@ -1,11 +1,10 @@
-from flask import Flask, render_template, redirect, request, url_for, jsonify
+from flask import Flask, flash, render_template, redirect, request, url_for, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, CatalogItem
 from flask import session as login_session
 import random, string
 
-# IMPORTS FOR THIS STEP
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
@@ -19,7 +18,7 @@ CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Item Catalog Application"
 
-
+# Connect to Database and create database session
 engine = create_engine('sqlite:///superitemcatalog.db')
 Base.metadata.bind = engine
 
@@ -118,6 +117,7 @@ def gconnect():
     print "done!"
     return output
 
+# DISCONNECT - Revoke a current user's token and reset their login_session
 @app.route('/gdisconnect')
 def gdisconnect():
     access_token = login_session.get('access_token')
@@ -148,13 +148,14 @@ def gdisconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
-
+# This function opens JSON endpoints
 @app.route('/catalog/<int:catalog_id>/JSON')
 def catalogItemsJSON(catalog_id):
     catalogItem = session.query(CatalogItem).filter_by(id=catalog_id).one()
     return jsonify(CatalogItem=catalogItem.serialize)
 
 
+# This function is the Homepage for the item catalog.  It opens up the catalog.html page.
 @app.route('/catalog')
 @app.route('/')
 def ListCatalog():
@@ -162,13 +163,15 @@ def ListCatalog():
     return render_template('catalog.html', items = items)
 
 
-# Task 1: Create route for newMenuItem function here
+# This function creates a new catalog item for the database.
 @app.route('/catalog/create', methods=['GET', 'POST'])
 def newCatalogItem():
+    # If statement to allow only logged in personale to create items.
     if 'username' not in login_session:
         return redirect('/login')
     items = session.query(CatalogItem)
     if request.method == 'POST':
+        # This if statement ceates a new name, description, or price for the new catalog item.
         newItem = CatalogItem(name=request.form['name'], description=request.form['description'], price=request.form['price'])
         session.add(newItem)
         session.commit()
@@ -177,23 +180,27 @@ def newCatalogItem():
         return render_template('newitemmenu.html', items = items)
 
 
-# Task 2: Create route for editMenuItem function here
+# Edit catalog item function
+
+# This function selects catalog id to edit.
 @app.route('/catalog/<int:catalog_id>/edit', methods=['GET', 'POST'])
 def editCatalogItem(catalog_id):
     editedItem = session.query(CatalogItem).filter_by(id=catalog_id).one()
+    # This if statement requires that only logged in people can edit items.
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
+        # This if statement selects name to edit from on editcatalogitem.html.
         if request.form['name']:
             editedItem.name = request.form['name']
         session.add(editedItem)
         session.commit()
-        
+        # This if statement selects the item Description to edit from on editcatalogitem.html.
         if request.form['description']:
             editedItem.description = request.form['description']
         session.add(editedItem)
         session.commit()
-        
+        # This if statement selects the item price to edit form on editcatalogitem.html.
         if request.form['price']:
             editedItem.price = request.form['price']
         session.add(editedItem)
@@ -203,12 +210,16 @@ def editCatalogItem(catalog_id):
         return render_template('editcatalogitem.html', catalog_id=catalog_id, i = editedItem)
 
 
-# Task 3: Create a route for deleteMenuItem function here
+# Function to delete catalog items
+
+# Connects to specific catalog item id to delete.
 @app.route('/catalog/<int:catalog_id>/delete', methods=['GET', 'POST'])
 def deleteCatalogItem(catalog_id):
     itemToDelete = session.query(CatalogItem).filter_by(id=catalog_id).one()
+    # This if statement allows only logged in people to delete items.
     if 'username' not in login_session:
         return redirect('/login')
+    # This if statement selects specific item to delete.
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()
