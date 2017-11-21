@@ -1,5 +1,4 @@
 <!-- Item Catalog Project with Bootstrap 4. -->
-<!-- Create Item Page. -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,13 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Create Catalog Item</title>
+    <title>Item Catalog</title>
 
-    <!-- Connect to stylesheets. -->
+    <!-- Connect to stylesheets -->
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/toolkit-inverse.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/application.css') }}">
 
   </head>
+
 
   <body class="with-top-navbar">
 
@@ -30,7 +30,7 @@
           <!-- Navbar buttons for logging in and out.-->
             <ul class="nav navbar-nav navbar-right">
               <li>
-                <a href='{{url_for('gdisconnect')}}'><button class="btn btn-danger navbar-btn">Logout</button></a>
+                <a href='{{url_for('showLogin')}}'><button class="btn btn-primary navbar-btn">Login</button></a>
               </li>
             </ul>
 
@@ -38,25 +38,46 @@
       </div>
     </nav>
 
-    <!-- Container for creating new item, item description, and item price. -->
+    <!-- Main content container.  Link for creating new button. -->
     <div class="container">
+
       <div class="col-sm-9 content">
 
-        <h2 class="dashhead-title" style="padding-top: 30px;">New Catalog Item</h2>
+        <div class="dashhead">
+          <div class="dashhead-titles">
+          <h2 class="dashhead-title" style="padding-top: 60px;">Item Catalog</h2>
+        </div>
 
-        <form action="{{url_for('newCatalogItem')}}" method = 'POST'>
+        </div>
 
-        <p>Name:</p>
-        <input type='text' class='form-control' size='30' name='name' placeholder='New Catalog Item'></br>
-        <p>Description:</p>
-        <input type='text' class='form-control' size='30' name='description' placeholder='Description'></br>
-        <p>Price:</p>
-        <input type='text' class='form-control' size='30' name='price' placeholder='Price'></br></br>
-        <button type='submit' class="btn btn-primary-outline">Create</button></br></br>
-        </form>
+        <!-- List items in catalog nicely. -->
+      <div class="table-full">
 
-        <a href='{{url_for('ListCatalog')}}'><button class="btn btn-primary-outline block">Cancel</button></a>
+        <div class="table-responsive">
 
+          <table class="table" data-sort="table">
+            <thead>
+              <tr>
+                <th>Product:</th>
+                <th>Description:</th>
+                <th>Price:</th>
+              </tr>
+            </thead>
+
+            {% for i in items %}
+            <tbody>
+              <tr>
+                <td>{{i.name}}</td>
+                <td>{{i.description}}</td>
+                <td>{{i.price}}</td>
+              </tr>
+            </tbody>
+            {% endfor %}
+
+            </table>
+          </div>
+
+        </div>
       </div>
     </div>
 

@@ -1,7 +1,7 @@
 from flask import Flask, flash, render_template, redirect, request, url_for, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, CatalogItem
+from database_setup import Base, CatalogItem, User
 from flask import session as login_session
 import random, string
 
@@ -19,7 +19,7 @@ CLIENT_ID = json.loads(
 APPLICATION_NAME = "Item Catalog Application"
 
 # Connect to Database and create database session
-engine = create_engine('sqlite:///superitemcatalog.db')
+engine = create_engine('sqlite:///superitemcatalogwithusers.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -106,6 +106,12 @@ def gconnect():
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
+    # see if user exists
+    user_id = getUserID(login_session['email'])
+    if not user_id:
+        user_id = createUser(login_session)
+        
+    login_session['user_id'] = user_id
     output = ''
     output += '<h1>Welcome, '
     output += login_session['username']
@@ -116,6 +122,28 @@ def gconnect():
     flash("you are now logged in as %s" % login_session['username'])
     print "done!"
     return output
+
+
+def createUser(login_session):
+    newUser = User(name=login_session['username'], email=login_session['email'], picture=login_session['picture'])
+    session.add(newUser)
+    user = session.query(User).filter_by(email=login_session['email']).one()
+    session.commit()
+    return user.id
+
+
+def getUserInfo(user_id):
+    user = session.query(User).filter_by(id=user_id).one()
+    return user
+
+
+def getUserID(email):
+    try:
+        user = session.query(User).filter_by(email=email).one()
+        return user.id
+    except:
+        return None
+    
 
 # DISCONNECT - Revoke a current user's token and reset their login_session
 @app.route('/gdisconnect')
@@ -142,7 +170,7 @@ def gdisconnect():
         del login_session['picture']
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
-        return response
+        return redirect('/catalog')
     else:
         response = make_response(json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
@@ -160,8 +188,10 @@ def catalogItemsJSON(catalog_id):
 @app.route('/')
 def ListCatalog():
     items = session.query(CatalogItem)
-    return render_template('catalog.html', items = items)
-
+    if 'username' not in login_session:
+        return render_template('publiccatalog.html', items = items)
+    else:
+        return render_template('catalog.html', items = items)
 
 # This function creates a new catalog item for the database.
 @app.route('/catalog/create', methods=['GET', 'POST'])
@@ -172,7 +202,8 @@ def newCatalogItem():
     items = session.query(CatalogItem)
     if request.method == 'POST':
         # This if statement ceates a new name, description, or price for the new catalog item.
-        newItem = CatalogItem(name=request.form['name'], description=request.form['description'], price=request.form['price'])
+        newItem = CatalogItem(name=request.form['name'], description=request.form['description'], price=request.form['price'],
+            user_id=login_session['user_id'])
         session.add(newItem)
         session.commit()
         return redirect(url_for('ListCatalog', items = items))
