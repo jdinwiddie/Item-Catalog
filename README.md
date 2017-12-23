@@ -23,6 +23,9 @@ using SQLAlchemy as the ORM.
 * Open up Web Browser
 * type into search bar: http://localhost:5000
 
+To view the online version, check it out here:
+http://newpcbuilder.com
+
 ## Creators
 
 * Joshua Dinwiddie
