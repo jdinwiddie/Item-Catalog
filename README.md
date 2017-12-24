@@ -1,8 +1,8 @@
-# Item Catalog with Bootstrap 4
+# Item Catalog with Python
 
-This project is a Web Application built with flask to be able to preform Create, Read, Update,
-Delete (CRUD) operations from a database.  I performed these in an SQLite Database
-using SQLAlchemy as the ORM.
+This project is a Python Web Application built with the Framework flask to be able to preform Create, Read, Update,
+Delete (CRUD) operations from a database.  I performed these in an PostgreSQL Database
+using SQLAlchemy as the ORM.  I used Bootstrap 4 for my stylesheet.
 
 ## Table of Contents
 
